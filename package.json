@@ -1,0 +1,19 @@
+{
+  "name": "affilate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bitly": "^7.1.2",
+    "flipkart-affiliate": "^1.1.0",
+    "node-cron": "^3.0.2",
+    "node-telegram-bot-api": "^0.60.0",
+    "node-url-shortener": "^2.0.3",
+    "xmlhttprequest": "^1.8.0"
+  }
+}
