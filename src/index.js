@@ -22,44 +22,79 @@ var y = "Make sure your question is on-topic and suitable for this site";
 const token = "5836609438:AAGM7E9nUz77xXKP0PeCQm1rukR5cQjnobQ";
 const chat_id = "-1001846161767";
 message = "fetch testing";
+var resultsforfind= {};
+var productInfo = [];
+var maxIndex;
+var MaxDiscountPrice;
+var MaxDiscountProdName;
+var maxDiscountProdLink;
+
 
 // get deal of the year
-const dealofday=()=>{
-    fkc.getDealsOfDay(null, function (err, resp) { //DOD
-        if (!err) {
-            console.log("typeof: ", resp);
-            var obj = JSON.parse(resp);
-            productUrl = obj.dotdList[0].url;
-            console.log(obj);
-            return productUrl;
-            //productName = obj.dotdList[0].
-            // console.log("json is: ", obj.dotdList[0].url);
-            // api.open("GET", url, true);
-            // api.send();
+// const dealofday=()=>{
+//     fkc.getDealsOfDay(null, function (err, resp) { //DOD
+//         if (!err) {
+//             console.log("typeof: ", resp);
+//             var obj = JSON.parse(resp);
+//             productUrl = obj.dotdList[0].url;
+//             console.log(obj);
+//             return productUrl;
+//             //productName = obj.dotdList[0].
+//             // console.log("json is: ", obj.dotdList[0].url);
+//             // api.open("GET", url, true);
+//             // api.send();
     
-        } else {
-            console.log(err);
-        }
+//         } else {
+//             console.log(err);
+//         }
     
-    });
-}
+//     });
+// }
+// dealofday();
 
-shortUrl.short(productUrl, function(err, url){
+
+// keyword search and give the maximum discount product's name discount percentage and url
+fkc.keywordSearch({
+    query: "mi mobile", //search String
+    resultCount: "10" //no of products in result
+  }, function(err, results){
+    if(err){
+      console.log(err);
+    } else{
+         resultsforfind = JSON.parse(results);
+         console.log(typeof(resultsforfind));
+      console.log(resultsforfind.products[0].productBaseInfoV1.discountPercentage);
+     for(i=0;i<=9;i++){
+        productInfo.push(resultsforfind.products[i].productBaseInfoV1.discountPercentage);
+        // console.log("running for loop")
+     }
+     var largest = Math.max.apply(0, productInfo);
+     // console.log("product info after push: ",productInfo);
+     // console.log("maximum discount index: ",productInfo.indexOf(largest));
+     maxIndex = productInfo.indexOf(largest);
+     MaxDiscountPrice = resultsforfind.products[maxIndex].productBaseInfoV1.discountPercentage;
+     MaxDiscountProdName = resultsforfind.products[maxIndex].productBaseInfoV1.title;
+     maxDiscountProdLink = resultsforfind.products[maxIndex].productBaseInfoV1.productUrl;
+    }
+});
+
+
+shortUrl.short(maxDiscountProdLink, function(err, url){
     shortedUrl = url;
     console.log("product url is: ",url);
 });
 
 const bot = new TelegramBot(token, { polling: true });
 bot.on("polling_error", console.log);
-setTimeout(() => bot.sendMessage(chat_id, shortedUrl), 5000);
+// setTimeout(() => bot.sendMessage(chat_id, shortedUrl), 5000);
 
 bot.on('message', (msg) => {
 
     var hi = "hi";
-    dealofday();
+    // dealofday();
 
     if (msg.text.toString().toLowerCase().indexOf(hi) === 0) {
-        bot.sendMessage(msg.chat.id, `<b>bold</b> \n <i>italic</i> \n <em>italic with em</em> \n <a target=\"_blank\" href=\"${shortedUrl}\">inline URL</a> \n <code>inline fixed-width code</code> \n <pre>pre-formatted fixed-width code block</pre>` ,{parse_mode : "HTML"});
+        bot.sendMessage(msg.chat.id, `<b>bold</b> \n <i>italic</i> \n <em>italic with em</em> \n <a target=\"_blank\" href=\"${maxDiscountProdLink}\">inline URL</a> \n <code>inline fixed-width code</code> \n <pre>pre-formatted fixed-width code block</pre>` ,{parse_mode : "HTML"});
     }
 
     var bye = "bye";
@@ -69,16 +104,6 @@ bot.on('message', (msg) => {
 
 });
 
-// fkc.keywordSearch({
-//     query: "laptop", //search String
-//     resultCount: "5" //no of products in result
-//   }, function(err, results){
-//     if(err){
-//       console.log(err);
-//     } else{
-//       console.log(results);
-//     }
-// });
 
 
 // cron.schedule("*/11 * * * * *", function () {
