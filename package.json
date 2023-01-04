@@ -14,6 +14,7 @@
     "node-cron": "^3.0.2",
     "node-telegram-bot-api": "^0.60.0",
     "node-url-shortener": "^2.0.3",
+    "pirated-data": "^2.0.4",
     "xmlhttprequest": "^1.8.0"
   }
 }
