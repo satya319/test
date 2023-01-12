@@ -18,15 +18,15 @@ const bitly = new BitlyClient('ee8251f27304ceb677990860cda5a682c5dda617', {});
 
 var fkc = aff.createClient({
     FkAffId: 'jagan319', //as obtained from [Flipkart Affiliates API](https://affiliate.flipkart.com/api-docs/)
-    FkAffToken: 'bdf954ba52f64232a3612bfae3e52ea4',
+    FkAffToken: 'b8f1de19682a48d5b72e10305a7bd39d',
     responseType: 'json'
 });
 
 // all variable here
 var productUrl = "https://www.flipkart.com/mobile-accessories/cases-and-covers/designer-cases-covers/pr?sid=tyy%2C4mr%2Cq2u%2Cqgl&offer=nb%3Amp%3A1130f54629&ctx=eyJjYXJkQ29udGV4dCI6eyJhdHRyaWJ1dGVzIjp7InZhbHVlQ2FsbG91dCI6eyJtdWx0aVZhbHVlZEF0dHJpYnV0ZSI6eyJrZXkiOiJ2YWx1ZUNhbGxvdXQiLCJpbmZlcmVuY2VUeXBlIjoiVkFMVUVfQ0FMTE9VVCIsInZhbHVlcyI6WyJFeHRyYSAxMCUgb2ZmIl0sInZhbHVlVHlwZSI6Ik1VTFRJX1ZBTFVFRCJ9fSwidGl0bGUiOnsibXVsdGlWYWx1ZWRBdHRyaWJ1dGUiOnsia2V5IjoidGl0bGUiLCJpbmZlcmVuY2VUeXBlIjoiVElUTEUiLCJ2YWx1ZXMiOlsiRGVzaWduZXIgQ2FzZXMgJiBDb3ZlcnMiXSwidmFsdWVUeXBlIjoiTVVMVElfVkFMVUVEIn19fX19&affid=jagan319";
 var y = "Make sure your question is on-topic and suitable for this site";
-const token = "5836609438:AAGM7E9nUz77xXKP0PeCQm1rukR5cQjnobQ";
-const chat_id = "-1001846161767";
+const token = "5885018990:AAEYbRyHUQLhIeo5gxQ3jkcGnQ8x9Lq4nfM";
+const chat_id = "-1001759399523";
 message = "fetch testing";
 var resultsforfind = {};
 var productInfo = [];
@@ -65,26 +65,26 @@ const keywordProduct = () => {
         query: productNames[pd.randomNumberGenerator(productNames.length)], //search String
         resultCount: "10" //no of products in result
     }, function (err, results) {
-         productInfo.length = 0;
+        productInfo.length = 0;
         // console.log(pd.randomNumberGenerator(40));
         if (err) {
             console.log(err);
         } else {
             resultsforfind = JSON.parse(results);
-           console.log("array length: ",productInfo.length);
+            console.log("array length: ", productInfo.length);
             console.log(typeof (resultsforfind));
             console.log(resultsforfind.products[0].productBaseInfoV1.discountPercentage);
             for (i = 0; i <= 9; i++) {
                 productInfo.push(resultsforfind.products[i].productBaseInfoV1.discountPercentage);
-                console.log("running for loop",productInfo.push(resultsforfind.products[i].productBaseInfoV1.discountPercentage))
+                console.log("running for loop", productInfo.push(resultsforfind.products[i].productBaseInfoV1.discountPercentage))
             }
             var largest = Math.max.apply(0, productInfo);
-             console.log("product info after push: ",productInfo);
-             console.log("maximum discount index: ",productInfo.indexOf(largest));
+            console.log("product info after push: ", productInfo);
+            console.log("maximum discount index: ", productInfo.indexOf(largest));
             maxIndex = productInfo.indexOf(largest);
-            console.log("maxindex is: ",maxIndex);
-            console.log("products: ",resultsforfind);
-             MaxDiscountPrice = resultsforfind.products[maxIndex].productBaseInfoV1.discountPercentage;
+            console.log("maxindex is: ", maxIndex);
+            console.log("products: ", resultsforfind);
+            MaxDiscountPrice = resultsforfind.products[maxIndex].productBaseInfoV1.discountPercentage;
             MaxDiscountProdName = resultsforfind.products[maxIndex].productBaseInfoV1.title;
             maxDiscountProdLink = resultsforfind.products[maxIndex].productBaseInfoV1.productUrl;
             //var y = pd.randomNumberGenerator(448);
@@ -93,7 +93,7 @@ const keywordProduct = () => {
         }
     })
 };
-
+keywordProduct();
 
 shortUrl.short(maxDiscountProdLink, function (err, url) {
     shortedUrl = url;
@@ -104,27 +104,27 @@ const bot = new TelegramBot(token, { polling: true });
 bot.on("polling_error", console.log);
 // setTimeout(() => bot.sendMessage(chat_id, shortedUrl), 5000);
 
-// bot.on('message', (msg) => {
+bot.on('message', (msg) => {
 
-//     var hi = "hi";
-//     // dealofday();
+    var hi = "hi";
+    // dealofday();
 
-//     if (msg.text.toString().toLowerCase().indexOf(hi) === 0) {
-//         bot.sendMessage(msg.chat.id, `<b>${MaxDiscountProdName}</b> \n <i>${MaxDiscountPrice + " % off"}</i>\n <a target=\"_blank\" href=\"${maxDiscountProdLink}\">Click here to get it.</a>`, { parse_mode: "HTML" });
-//     }
+    if (msg.text.toString().toLowerCase().indexOf(hi) === 0) {
+        bot.sendMessage(msg.chat.id, `<b>${MaxDiscountProdName}</b> \n <i>${MaxDiscountPrice + " % off"}</i>\n <a target=\"_blank\" href=\"${maxDiscountProdLink}\">Click here to get it.</a>`, { parse_mode: "HTML" });
+    }
 
-//     var bye = "bye";
-//     if (msg.text.toString().toLowerCase().includes(bye)) {
-//         bot.sendMessage(msg.chat.id, `[click on link](${shortedUrl})`, { parse_mode: "Markdown" });
-//     }
+    var bye = "bye";
+    if (msg.text.toString().toLowerCase().includes(bye)) {
+        bot.sendMessage(msg.chat.id, `[click on link](${shortedUrl})`, { parse_mode: "Markdown" });
+    }
 
-// });
+});
 
 
 
- cron.schedule("*/2 * * * *", function () {
-     keywordProduct();
-   setTimeout(() => bot.sendMessage(chat_id, `<b>${MaxDiscountProdName}</b> \n <i>${MaxDiscountPrice + " % off"}</i>\n <a target=\"_blank\" href=\"${maxDiscountProdLink}\">Click here to get it.</a>`, { parse_mode: "HTML" }), 5000);
+cron.schedule("*/2 * * * *", function () {
+    keywordProduct();
+    setTimeout(() => bot.sendMessage(chat_id, `<b>${MaxDiscountProdName}</b> \n <i>${MaxDiscountPrice + " % off"}</i>\n <a target=\"_blank\" href=\"${maxDiscountProdLink}\">Click here to get it.</a>`, { parse_mode: "HTML" }), 5000);
     console.log("running a task every11 sec");
 });
 
